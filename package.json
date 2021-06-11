@@ -1,0 +1,22 @@
+{
+  "name": "qrcode-generator",
+  "version": "0.1.0",
+  "description": "QRCode Generator",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "Jérôme Bastian Winkel",
+  "license": "ISC",
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.1",
+    "bootstrap-icons": "^1.5.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "qrcode": "^1.4.4"
+  },
+  "devDependencies": {
+    "electron": "^13.0.0"
+  }
+}

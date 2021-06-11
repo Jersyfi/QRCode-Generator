@@ -1,0 +1,88 @@
+body {
+    background: white;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.draggable {
+    position: fixed;
+    top: 0;
+    left: 0px;
+    right: 138px;
+    height: 25px;
+    -webkit-app-region: drag;
+}
+
+/* Windows controls */
+.win-controls {
+    -webkit-app-region: nodrag;
+    z-index: 1030;
+    display: grid;
+    grid-template-columns: repeat(3, 46px);
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 32px;
+    background: #000;
+}
+
+.win-controls .win-button {
+    grid-row: 1 / span 1;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.win-controls .win-button:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.win-controls .win-button img {
+    width: 10px;
+    height: 10px;
+}
+
+#win-button-min {
+    grid-column: 1;
+}
+
+#win-button-max, #win-button-restore {
+    grid-column: 2;
+}
+
+#win-button-restore {
+    display: none;
+}
+
+#win-button-close {
+    grid-column: 3;
+}
+
+#win-button-close:hover {
+    background: #E81123 !important;
+}
+
+/* Content */
+#qrCanvas.qr-inactive, #qrCanvasPlaceholder.qr-inactive, #qrBtnSave.qr-inactive {
+    display: none;
+}
+
+.column-gap-4 {
+    column-gap: 1.5rem;
+}
+
+.full-20-rem {
+    max-width: 20rem;
+    width: 100%;
+    max-height: 20rem;
+    height: 100%;
+}
+
+.full-size {
+    width: 100% !important;
+    height: auto !important;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>QRCode Generator</title>
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+        <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <div class="draggable"></div>
+    
+            <div class="win-controls">
+                <div class="win-button" id="win-button-min">
+                    <img src="icons/min.png">
+                </div>
+                <div class="win-button" id="win-button-max">
+                    <img src="icons/max.png">
+                </div>
+                <div class="win-button" id="win-button-restore">
+                    <img src="icons/restore.png">
+                </div>
+                <div class="win-button" id="win-button-close">
+                    <img src="icons/close.png">
+                </div>
+            </div>
+        </header>
+
+        <div class="w-100 h-100 p-4 d-flex flex-column">
+            <div class="mb-4">
+                <h1 class="mb-0">QRCode Generator</h1>
+            </div>
+            <div class="d-flex h-100 column-gap-4">
+                <div class="w-100 h-100">
+                    <div class="w-100 h-100">
+                        <div class="bg-light p-4 border mb-4">
+                            <p>Gib deine URL ein um sie generieren zu lassen.</p>
+    
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-0" id="qrInputUrl" placeholder="https://www.hepgmbh.de/">
+                                <label for="qrInputUrl">URL</label>
+                            </div>
+                        </div>
+    
+                        <button type="button" class="btn btn-primary btn-sm rounded-0" class="qr-inactive" id="qrBtnSave">Speichern</button>
+                    </div>
+                </div>
+                <div class="bg-light full-20-rem border">
+                    <div class="w-100 h-100">
+                        <canvas class="qr-inactive full-size" id="qrCanvas"></canvas>
+    
+                        <div class="p-4">
+                            <span id="qrCanvasPlaceholder">Bitte gebe deine Daten ein.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="renderer.js"></script>
+    </body>
+</html>
