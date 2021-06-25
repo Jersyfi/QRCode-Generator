@@ -1,9 +1,11 @@
-const { app, BrowserWindow, Menu, Tray, ipcMain, dialog } = require('electron'),
+const { app, BrowserWindow, Menu, Tray, ipcMain, dialog, windowStateKeepter } = require('electron'),
     path = require('path'),
     fs = require('fs')
 
 var win = null
 var tray = null
+var initPath = path.join(app.getAppPath(), 'init.json')
+var bounds = null
 
 app.whenReady().then(() => {
     createWindow()
@@ -15,22 +17,25 @@ app.whenReady().then(() => {
     })
 })
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-})
-
 function createWindow() {
     Menu.setApplicationMenu(null)
 
+    try {
+        bounds = JSON.parse(fs.readFileSync(initPath, 'utf8'))
+    }
+    catch (e) {
+        bounds = null
+    }
+
     win = new BrowserWindow({
         title: app.getName(),
-        icon: path.join('assets', 'Logo.png'),
+        icon: path.join('assets', 'logo.png'),
         minWidth: 800,
-        width: 1280,
+        width: bounds ? bounds.width : 800,
+        x: bounds ? bounds.x : null,
         minHeight: 600,
-        height: 720,
+        height: bounds ? bounds.height : 600,
+        y: bounds ? bounds.y : null,
         show: false,
         frame: false,
         fullscreenable: false,
@@ -43,7 +48,7 @@ function createWindow() {
     })
 
     win.loadFile('index.html')
-    win.openDevTools()
+    //win.openDevTools()
     win.show()
 
     // Window events
@@ -53,9 +58,9 @@ function createWindow() {
         tray = createTray()
     })
 
-    win.on('resize', (event) => {
-        // store data
-    })
+    win.on('resize', handleInitSaveBounds)
+
+    win.on('move', handleInitSaveBounds)
 
     win.on('maximize', (event) => {
         win.webContents.send('fe-event-max')
@@ -85,7 +90,7 @@ function createWindow() {
     })
 
     ipcMain.on('be-event-qrcodesave', (event, image) => {
-        dialog.showSaveDialog({
+        dialog.showSaveDialog(win, {
             title: 'Generierten QRCode Speichern',
             filters: [
                 {
@@ -99,7 +104,6 @@ function createWindow() {
 
                 fs.writeFile(result.filePath.toString(), data, 'base64', (err) => {
                     if (err) throw err
-                    console.log('saved qrcode')
                 })
             }
         }).catch(err => {
@@ -109,7 +113,7 @@ function createWindow() {
 }
 
 function createTray() {
-    let tray = new Tray(path.join('assets', 'Logo.png'))
+    let tray = new Tray(path.join('assets', 'logo.png'))
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show', click: () => {
@@ -130,4 +134,8 @@ function createTray() {
     })
     tray.setToolTip('QRCode Generator')
     tray.setContextMenu(contextMenu)
+}
+
+function handleInitSaveBounds() {
+    fs.writeFileSync(initPath, JSON.stringify(win.getBounds()))
 }
