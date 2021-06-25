@@ -1,7 +1,7 @@
 // Windows Button Events
 const { ipcRenderer } = require("electron")
 
-const btnMin = document.getElementById('win-button-min'),
+var btnMin = document.getElementById('win-button-min'),
     btnMax = document.getElementById('win-button-max'),
     btnRestore = document.getElementById('win-button-restore'),
     btnClose = document.getElementById('win-button-close')
@@ -35,35 +35,45 @@ ipcRenderer.on('fe-event-restore', (event, msg) => {
 // QRCode
 const QRCode = require('qrcode')
 
-const qrCanvas = document.getElementById('qrCanvas'),
-    qrBtnSave = document.getElementById('qrBtnSave'),
+var qrCanvas = document.getElementById('qrCanvas'),
     qrInputUrl = document.getElementById('qrInputUrl'),
     qrCanvasPlaceholder = document.getElementById('qrCanvasPlaceholder')
+
+var qrBtnJPG = document.getElementById('qrBtnJPG'),
+    qrBtnPNG = document.getElementById('qrBtnPNG'),
+    qrBtnSVG = document.getElementById('qrBtnSVG')
 
 qrInputUrl.addEventListener('keyup', () => {
     if (qrInputUrl.value == '') {
         qrCanvasPlaceholder.classList.remove('qr-inactive')
         qrCanvas.classList.add('qr-inactive')
-        qrBtnSave.classList.add('qr-inactive')
 
-        QRCode.toCanvas(qrCanvas, 'https://www.hepgmbh.de', (error) => {
-            if (error) console.log(error)
-        })
+        //qrBtnJPG.classList.add('qr-inactive')
+        qrBtnPNG.classList.add('qr-inactive')
+        //qrBtnSVG.classList.add('qr-inactive')
 
-        qrBtnSave.removeEventListener('click', handleSaveClick, true)
+        //qrBtnJPG.removeEventListener('click', handleSaveClick, true)
+        qrBtnPNG.removeEventListener('click', handleSaveClick, true)
+        //qrBtnSVG.removeEventListener('click', handleSaveClick, true)
     } else {
         qrCanvas.classList.remove('qr-inactive')
         qrCanvasPlaceholder.classList.add('qr-inactive')
-        qrBtnSave.classList.remove('qr-inactive')
 
-        QRCode.toCanvas(qrCanvas, qrInputUrl.value, { errorCorrectionLevel: 'H' }, (error) => {
+        //qrBtnJPG.classList.remove('qr-inactive')
+        qrBtnPNG.classList.remove('qr-inactive')
+        //qrBtnSVG.classList.remove('qr-inactive')
+
+        //qrBtnJPG.addEventListener('click', handleSaveClick)
+        qrBtnPNG.addEventListener('click', handleSaveClick)
+        //qrBtnSVG.addEventListener('click', handleSaveClick)
+
+        QRCode.toCanvas(qrCanvas, qrInputUrl.value, { errorCorrectionLevel: 'H', scale: 10 }, (error) => {
             if (error) console.log(error)
         })
-    
-        qrBtnSave.addEventListener('click', handleSaveClick)
     }
 })
 
-const handleSaveClick = () => {
+const handleSaveClick = (event) => {
+    console.log(event)
     ipcRenderer.send('be-event-qrcodesave', qrCanvas.toDataURL())
 }
